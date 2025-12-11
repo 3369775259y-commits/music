@@ -1,0 +1,7 @@
+{
+  "name": "Gesture Control HUD",
+  "description": "A futuristic hand-tracking interface controlling particle visualizations (Jellyfish, Snow, Rain) with a cyberpunk HUD overlay.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
