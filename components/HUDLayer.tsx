@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useRef } from 'react';
 import { AppMode, SongData, HandData, LyricLine } from '../types';
 import { SONGS, TABS } from '../constants';
-import { Activity, Move, MousePointerClick, Disc, Cpu, Zap, Hand, ThumbsUp } from 'lucide-react';
+import { Activity, Move, MousePointerClick, Disc, Cpu, Zap, Hand, ThumbsUp, Snowflake, Wind, BarChart3 } from 'lucide-react';
 
 interface HUDLayerProps {
   currentMode: AppMode;
@@ -150,93 +150,106 @@ export const HUDLayer: React.FC<HUDLayerProps> = ({ currentMode, handData, onTab
 
   // --- CONTENT RENDERER ---
   const renderContent = () => {
-    // 1. SNOW MODE INTERFACE (Tech/Hexagon - ENRICHED & BOLDER)
+    // 1. SNOW MODE INTERFACE (Theme: Black Ice / Frozen Vinyl)
     if (currentMode === AppMode.SNOW) {
       return (
-        <div className="flex flex-1 items-center justify-between mt-8 w-full px-16 font-mono overflow-hidden">
+        <div className="flex flex-1 items-center justify-center gap-12 mt-8 w-full px-8 font-mono overflow-hidden">
           
-          {/* --- BOLDER RECORD PLAYER --- */}
-          <div className="relative w-96 h-96 flex items-center justify-center shrink-0 perspective-1000">
+          {/* --- FROST CORE RECORD PLAYER --- */}
+          <div className="relative w-[360px] h-[360px] flex items-center justify-center shrink-0 perspective-1000">
              
-             {/* Background Glow */}
-             <div className="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full animate-pulse" />
+             {/* Global Cold Ambient Glow */}
+             <div className="absolute inset-0 bg-cyan-400/10 blur-[90px] rounded-full" />
 
-             {/* Background Static Elements - Darker and Solid */}
-             <div className="absolute inset-[-30px] border-[2px] border-cyan-900/50 rounded-full bg-black/40" />
-             <div className="absolute inset-[-15px] border-[6px] border-dashed border-cyan-900/40 rounded-full animate-[spin_60s_linear_infinite]" />
+             {/* 0. Outer Frost Ring (Presence Boosted) */}
+             <div className={`absolute inset-[-30px] rounded-full border-[1.5px] border-cyan-200/30 opacity-80
+                             shadow-[0_0_30px_rgba(165,243,252,0.15)]
+                             ${isPlaying ? 'animate-[spin_60s_linear_infinite]' : ''}`} />
+             
+             {/* 0.5 Ticks on Outer Ring */}
+             <div className={`absolute inset-[-15px] rounded-full flex items-center justify-center opacity-60 ${isPlaying ? 'animate-[spin_60s_linear_infinite_reverse]' : ''}`}>
+                 {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(deg => (
+                     <div key={deg} className="absolute w-1 h-1 bg-white/90 rounded-full top-0 origin-center shadow-[0_0_5px_white]" 
+                          style={{ transform: `rotate(${deg}deg) translateY(-190px)` }} />
+                 ))}
+             </div>
 
-             {/* 1. Outer Tech Ring (Rotating) - Thicker & Filled */}
-             <div className="absolute inset-[-5px] bg-cyan-950/30 border-[3px] border-cyan-500/60 clip-path-polygon-[50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%] animate-[spin_20s_linear_infinite] shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-                 {/* Decorative marks on the ring */}
-                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-6 bg-cyan-400" />
-                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-6 bg-cyan-400" />
+             {/* 1. Base Structure: Hexagonal Ice Plate (Boosted Presence) */}
+             <div className="absolute inset-0 border-[4px] border-white/20 bg-gradient-to-br from-cyan-800/20 to-transparent backdrop-blur-md shadow-[0_0_60px_rgba(34,211,238,0.2)]
+                             clip-path-polygon-[50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%]
+                             animate-[spin_30s_linear_infinite]"
+                  style={{ clipPath: 'polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%)' }}>
+                 <div className="absolute inset-0 border-t border-white/30" />
+                 {/* Inner shimmer to add presence */}
+                 <div className="absolute inset-0 bg-white/5" />
+             </div>
+
+             {/* 3. The "BLACK ICE VINYL" (Black -> Blue Gradient) */}
+             <div className={`absolute inset-[60px] rounded-full shadow-2xl flex items-center justify-center overflow-hidden z-10 
+                              bg-[radial-gradient(circle_at_center,_#000000_30%,_#082f49_80%,_#0e7490_100%)]
+                              border border-cyan-500/30`}>
+                 
+                 {/* Frost/Ice Texture Overlay */}
+                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent rotate-45" />
+
+                 {/* Icy Grooves (Light Blue, not white) */}
+                 <div className="absolute inset-3 rounded-full border border-cyan-200/20" />
+                 <div className="absolute inset-8 rounded-full border border-cyan-200/20" />
+                 <div className="absolute inset-14 rounded-full border border-cyan-200/20" />
+                 <div className="absolute inset-20 rounded-full border border-cyan-200/20" />
+
+                 {/* Center Label - Frozen Crystal */}
+                 <div className={`relative w-24 h-24 rounded-full flex items-center justify-center 
+                                 bg-gradient-to-b from-black to-cyan-950 border border-cyan-700/50
+                                 shadow-[inset_0_0_15px_rgba(6,182,212,0.3)]
+                                 ${isPlaying ? 'animate-[spin_6s_linear_infinite]' : ''}`}>
+                    
+                    {/* Snowflake Totem */}
+                    <Snowflake size={40} strokeWidth={1.5} className="text-cyan-200/80 drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]" />
+                    
+                 </div>
+             </div>
+
+             {/* 5. The Reader - Crystalline Shard (Less Tech, More Ice) */}
+             <div className="absolute -right-8 top-1/2 -translate-y-1/2 flex items-center z-20">
+                  {/* Laser Beam -> Icy Beam */}
+                  <div className={`h-[2px] bg-cyan-200 shadow-[0_0_10px_white] mr-[-2px] rounded-l-full transition-all duration-700 ${isPlaying ? 'w-24 opacity-80' : 'w-0 opacity-0'}`} />
+                  
+                  {/* Crystal Shard Housing */}
+                  <div className="relative w-8 h-16 flex items-center justify-center rotate-12">
+                      <div className="absolute inset-0 bg-cyan-100/20 border border-white/40 backdrop-blur-md clip-path-polygon-[50%_0,100%_50%,50%_100%,0_50%]" style={{clipPath: 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)'}} />
+                      <div className="absolute w-1 h-8 bg-white/80 rounded-full shadow-[0_0_10px_cyan]" />
+                  </div>
+             </div>
+
+             {/* 6. Floating Ambient Info - Simplified */}
+             
+             {/* Top: Frost Level */}
+             <div className="absolute -top-12 flex flex-col items-center gap-1 opacity-60">
+                 <Snowflake size={12} className="text-cyan-200 animate-pulse" />
+                 <div className="h-8 w-[1px] bg-gradient-to-b from-transparent via-cyan-200 to-transparent" />
              </div>
              
-             {/* 2. Counter-Rotating Inner Ring - High Contrast */}
-             <div className="absolute inset-4 border-[2px] border-cyan-300 clip-path-polygon-[50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%] animate-[spin_15s_linear_infinite_reverse]" />
-
-             {/* 3. The "Record" - Data Cube Core - Solid Presence */}
-             <div className={`relative w-56 h-56 bg-cyan-950/80 backdrop-blur-xl border-2 border-cyan-400 flex items-center justify-center overflow-hidden transition-transform duration-1000 shadow-[0_0_30px_rgba(6,182,212,0.4)] ${isPlaying ? 'scale-100' : 'scale-95 grayscale'}`}>
-                
-                {/* Tech Grid Background - Brighter */}
-                <div className="absolute inset-0 opacity-40" 
-                     style={{ backgroundImage: 'linear-gradient(cyan 1px, transparent 1px), linear-gradient(90deg, cyan 1px, transparent 1px)', backgroundSize: '20px 20px' }} 
-                />
-                
-                {/* Rotating Diamond Core - Solid */}
-                <div className={`w-32 h-32 border-[4px] border-cyan-300 rotate-45 flex items-center justify-center bg-black/50 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-                    <div className="w-20 h-20 bg-cyan-500 border border-white flex items-center justify-center shadow-[0_0_20px_cyan]">
-                        <div className="w-12 h-12 bg-white animate-pulse" />
-                    </div>
-                </div>
-
-                {/* Scanning Laser Line */}
-                <div className={`absolute left-0 right-0 h-2 bg-white shadow-[0_0_15px_white] ${isPlaying ? 'animate-scan-vertical' : 'hidden'}`} />
-
-                {/* Corner Accents - Chunky */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-cyan-300" />
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-cyan-300" />
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-cyan-300" />
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-cyan-300" />
+             {/* Bottom: Wind/Flow */}
+             <div className="absolute -bottom-12 flex flex-col items-center gap-1 opacity-60">
+                 <div className="h-8 w-[1px] bg-gradient-to-b from-transparent via-cyan-200 to-transparent" />
+                 <Wind size={12} className="text-cyan-200" />
              </div>
 
-             {/* 4. Peripheral Stats / Text */}
-             <div className="absolute -right-12 top-10 flex flex-col gap-2 text-xs text-cyan-400 font-bold tracking-wider bg-black/80 p-2 border border-cyan-800">
-                <span>R: {isPlaying ? Math.floor(Math.random() * 999) : '000'}</span>
-                <span>G: {isPlaying ? Math.floor(Math.random() * 999) : '000'}</span>
-                <span>B: {isPlaying ? Math.floor(Math.random() * 999) : '000'}</span>
-             </div>
-
-             <div className="absolute -left-16 bottom-16 text-xs text-white font-bold bg-cyan-600 px-3 py-1 -rotate-90 origin-right flex items-center gap-2 shadow-lg">
-                <Disc size={14} />
-                <span>ACTIVE.DISC</span>
-             </div>
-
-             {/* Bottom Label Box */}
-             <div className="absolute -bottom-20 w-72 h-14 border-2 border-cyan-600 bg-black flex items-center justify-between px-4 shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-               <div className="flex flex-col">
-                  <span className="text-cyan-500 text-[10px] font-bold">TRACK_ID</span>
-                  <span className="text-white text-sm font-black tracking-widest">#4902-X</span>
-               </div>
-               <div className="h-full w-0.5 bg-cyan-600" />
-               <div className="flex items-center gap-2 text-cyan-300">
-                  <Activity size={20} className={isPlaying ? 'animate-pulse text-white' : ''} />
-                  <span className="text-sm font-bold">{isPlaying ? 'LIVE' : 'OFF'}</span>
-               </div>
-             </div>
           </div>
 
           {/* Terminal Style Lyrics - Large Font */}
           <div className="w-1/2 h-[400px] flex flex-col items-end overflow-hidden mask-linear-fade" ref={lyricsContainerRef}>
-             <div className="border-l-4 border-cyan-500 pl-8 space-y-6 text-right w-full">
-                <h2 className="text-4xl font-bold text-white mb-8 tracking-tighter drop-shadow-[0_0_5px_rgba(0,0,0,1)]">
-                  <span className="text-cyan-400">&lt;</span> {song.title} <span className="text-cyan-400">/&gt;</span>
+             <div className="border-l-4 border-cyan-500/30 pl-8 space-y-6 text-right w-full">
+                <h2 className="text-4xl font-bold text-white mb-8 tracking-tighter drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+                  <span className="text-cyan-400 opacity-50">&lt;</span> {song.title} <span className="text-cyan-400 opacity-50">/&gt;</span>
                 </h2>
                 {lyrics.map((line, i) => {
                    const isActive = i === activeLineIndex;
                    return (
                     <div key={i} ref={isActive ? activeLineRef : null} 
-                         className={`transition-all duration-500 ${isActive ? 'scale-105 opacity-100 text-cyan-100 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'opacity-40 scale-95 text-cyan-700'}`}>
+                         className={`transition-all duration-500 ${isActive ? 'scale-105 opacity-100 text-cyan-50 drop-shadow-[0_0_10px_rgba(165,243,252,0.6)]' : 'opacity-40 scale-95 text-cyan-800'}`}>
                       {/* Font Size: text-4xl for active, text-2xl for others */}
                       <p className={`font-bold ${isActive ? 'text-4xl' : 'text-2xl'}`}>
                           {isActive ? '> ' : ''} {line.text}
