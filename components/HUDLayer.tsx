@@ -1,10 +1,11 @@
 import React, { useMemo, useEffect, useRef } from 'react';
 import { AppMode, SongData, HandData, LyricLine } from '../types';
-import { SONGS, TABS } from '../constants';
+import { TABS } from '../constants';
 import { Activity, Move, MousePointerClick, Disc, Cpu, Zap, Hand, ThumbsUp, Snowflake, Wind, BarChart3 } from 'lucide-react';
 
 interface HUDLayerProps {
   currentMode: AppMode;
+  songData: SongData;
   handData: HandData;
   onTabSelect: (mode: AppMode) => void;
   hoveredTab: AppMode | null;
@@ -14,6 +15,7 @@ interface HUDLayerProps {
 
 // Helper to parse LRC
 const parseLRC = (lrc: string): LyricLine[] => {
+  if (!lrc) return [];
   const lines = lrc.split('\n');
   const result: LyricLine[] = [];
   const timeReg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
@@ -29,11 +31,14 @@ const parseLRC = (lrc: string): LyricLine[] => {
       if (text) result.push({ time, text });
     }
   });
-  return result;
+  
+  // Sort by time just in case AI returns out of order
+  return result.sort((a, b) => a.time - b.time);
 };
 
-export const HUDLayer: React.FC<HUDLayerProps> = ({ currentMode, handData, onTabSelect, hoveredTab, currentTime, isPlaying }) => {
-  const song = SONGS[currentMode];
+export const HUDLayer: React.FC<HUDLayerProps> = ({ currentMode, songData, handData, onTabSelect, hoveredTab, currentTime, isPlaying }) => {
+  // Use passed songData instead of static lookup
+  const song = songData;
   
   // Memoize parsed lyrics
   const lyrics = useMemo(() => parseLRC(song.lrcString), [song.lrcString]);
